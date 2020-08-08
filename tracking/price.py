@@ -11,14 +11,18 @@ class price:
 		page = requests.get(url, self.header)
 		soup = BeautifulSoup(page.content, 'html.parser')
 
-		title = soup.find('div', {'class': 'apphub_AppName'}).text
-		price = soup.find('div', {'class': 'game_purchase_price price'}).text
-		
-		price = price.split()
-		price = ''.join(price)
-		price = price.replace('€', ' - Euro')
-		
-		return str(url)+'\n'+str(title)+'\n'+str(price)+'\n\n\n'
+		if soup.find('div', {'class': 'discount_pct'}):
+			title = soup.find('div', {'class': 'apphub_AppName'}).get_text()
+			price = soup.find('div', {'class': 'discount_final_price'}).get_text()
+			return str(url)+'\n'+str(title)+'\n'+str(price)+'\n\n'
+		else:
+			title = soup.find('div', {'class': 'apphub_AppName'}).get_text()
+			price = soup.find('div', {'class': 'game_purchase_price price'}).get_text()
+			price = price.split()
+			price = ''.join(price)
+			price = price.replace('€', ' - Euro')
+			return str(url)+'\n'+str(title)+'\n'+str(price)+'\n\n'
+		return 'Promotion\n\n'
 
 	def send_price(self, array):
 		price = ''
