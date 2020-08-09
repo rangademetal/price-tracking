@@ -3,4 +3,4 @@ Works only Linux/Mac OS
 
 ##
 
-It is the price monitorin on Steam Store write in Python, using Beautifulsoup4, Requests and MySql 
+It is the price monitoring on Steam Store write in Python, using Beautifulsoup4, Requests and MySql 
