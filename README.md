@@ -13,4 +13,4 @@ Price tracking and monitorization from different platforms
 
 ## Platform
 
-* Steam store
+* Steam
