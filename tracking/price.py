@@ -20,7 +20,7 @@ class price:
 			price = soup.find('div', {'class': 'game_purchase_price price'}).get_text()
 			price = price.split()
 			price = ''.join(price)
-			price = price.replace('€', ' - Euro')
+			# price = price.replace('€', ' - Euro')
 			return str(url)+'\n'+str(title)+'\n'+str(price)+'\n\n'
 		return 'Promotion\n\n'
 
