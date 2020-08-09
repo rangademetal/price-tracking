@@ -1,11 +1,11 @@
 import os 
 
 # email variables
-os.environ['username'] = 'pricetrackingbot123@gmail.com'
-os.environ['password_email'] = 'pricebot123.'
+USERNAME_GMAIL = os.environ.get('USERNAME_GMAIL')
+PASSWORD_GMAIL = os.environ.get('PASSWORD_GMAIL')
 
 #database variabes
-os.environ['host'] = 'hosting1993073.online.pro'
-os.environ['user'] = '00286862_tracking'
-os.environ['password_database'] = 'tracking123.'
-os.environ['database'] = '00286862_tracking'
+HOST_DATABASE = os.environ.get('HOST_DATABASE') 
+USERNAME_DATABASE_TRACKING = os.environ.get('USERNAME_DATABASE_TRACKING')
+PASSWORD_DATABASE_TRACKING = os.environ.get('PASSWORD_DATABASE_TRACKING')
+DATABASE_TRACKING  = os.environ.get('DATABASE_TRACKING')
