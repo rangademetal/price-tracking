@@ -2,25 +2,28 @@ from tracking import price
 from tracking.secret import *
 from tracking import database
 from PyQt5.QtWidgets import *
-import gui
 from datetime import date
+
+import gui
 import time
 import threading
 import requests
 
 
-headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15'}
+
+# headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15'}
 receive_email = ['stro3andr3i@gmail.com', 'stroeandrei483@gmail.com']
 tracker = []
 
 
-tracking = price.price(headers)
+# tracking = price.price(headers)
 db = database.database(HOST_DATABASE, USERNAME_DATABASE_TRACKING, PASSWORD_DATABASE_TRACKING, DATABASE_TRACKING)
 
 
-tracking.send_mail(USERNAME_GMAIL, receive_email, tracking.message_email(tracker), PASSWORD_GMAIL)
-tracking.convert_dict_to_arr(tracker, tracking.price_playstation('https://store.playstation.com/en-ro/product/EP3473-CUSA23320_00-9096831598950562'))
-tracking.send_mail(USERNAME_GMAIL, receive_email, tracking.message_email(tracker), PASSWORD_GMAIL)
+# tracking.send_mail(USERNAME_GMAIL, receive_email, tracking.message_email(tracker), PASSWORD_GMAIL)
+# tracking.convert_dict_to_arr(tracker, tracking.price_playstation('https://store.playstation.com/en-ro/product/EP3473-CUSA23320_00-9096831598950562'))
+# tracking.send_mail(USERNAME_GMAIL, receive_email, tracking.message_email(tracker), PASSWORD_GMAIL)
+
 class MainApp(gui.Ui_MainWindow, QMainWindow):
     def __init__(self):
         super(MainApp , self).__init__()
@@ -32,12 +35,14 @@ class MainApp(gui.Ui_MainWindow, QMainWindow):
         self.get_platforms()
         self.tabWidget.tabBar().setVisible(False)
         self.textEdit.setReadOnly(True)
+        self.header_btn.clicked.connect(self.set_header)
         self.price_btn.clicked.connect(self.open_price)
         self.settings_btn.clicked.connect(self.open_settings)
         self.view_btn.clicked.connect(self.open_view)   	
         self.create_btn.clicked.connect(self.open_create)
         self.addurl.clicked.connect(self.set_url)
         self.checker_btn.clicked.connect(self.set_platform)
+        self.get_price.clicked.connect(self.get_all_price)
 
 
     def open_price(self):
@@ -59,6 +64,15 @@ class MainApp(gui.Ui_MainWindow, QMainWindow):
             self.comboBox.addItem(i[0])
         con.close()
 
+    def set_header(self):
+        header = self.header_text.text()
+        header = {'User-Agent': str(header)}
+        
+        print(header)
+        self.tracking = price.price(header)
+
+
+
     def set_url(self):
         url = self.text_url.text()
         con = db.connection()
@@ -71,6 +85,8 @@ class MainApp(gui.Ui_MainWindow, QMainWindow):
         con.commit()
         con.close()
         self.textEdit.append('Added ' +url +' at '+ date.today().strftime('%Y-%m-%d'))
+
+
     def set_platform(self):
         url = self.url_checker_text.text()
         name = self.name_checker_text.text()
@@ -85,9 +101,16 @@ class MainApp(gui.Ui_MainWindow, QMainWindow):
         self.url_checker_text.setText('')
         self.name_checker_text.setText('')
 
-
-
-
+    def get_all_price(self):
+        con = db.connection()
+        query = con.cursor()
+        sql = 'SELECT tracking.URL FROM tracking LEFT JOIN platform ON tracking.id_platform = platform.id'
+        query.execute(sql)
+        myrs = query.fetchall()
+        for i in myrs:
+            dictionar = self.tracking.get_all_price(i[0])
+            self.tracking.convert_dict_to_arr(tracker, dictionar)
+        self.textEdit.append(self.tracking.message_email(tracker))
 
 if __name__ == '__main__':
     app = QApplication([])

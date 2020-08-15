@@ -28,16 +28,25 @@ class price:
 		page = requests.get(url, self.header)
 		soup = BeautifulSoup(page.content, 'html.parser')
 		title = soup.find('h2', {'class': 'pdp__title'}).get_text()
-		if soup.find('div', {'class': 'price-display__strikethrough'}):
+		if soup.find('span', {'class': 'price-display__strikethrough'}):
 			price_total = soup.find('div', {'class': 'price'}).get_text()
-			price_final = soup.find('div', {'class': 'price-display__price'}).get_text()
-			discount = soup.find('div', {'class': 'discount-badge__message'}).get_text()
+			price_final = soup.find('h3', {'class': 'price-display__price'}).get_text()
+			discount = soup.find('span', {'class': 'discount-badge__message'}).get_text()
 			items = {'url': url, 'title': 'Title: '+title, 'discount':'Discount: '+discount ,'price_total':'Total price: '+price_total, 'price_final':'Final price: '+price_final}
 		else:
 			price_final = soup.find('h3', {'class': 'price-display__price'}).get_text()
 			items = {'url': url, 'title': 'Title: '+title, 'price':'Price: '+price_final}
 		return items.values()
-
+	
+	def get_all_price(self, url):
+		page = requests.get(url, self.header)
+		soup = BeautifulSoup(page.content, 'html.parser')
+		if soup.find('div', {'class': 'apphub_AppName'}):
+			self.x = self.price_steam(url)
+		elif soup.find('h2', {'class': 'pdp__title'}):
+			self.x = self.price_playstation(url)
+		return self.x
+		 
 
 	def message_email(self, array):
 		price = ''
@@ -63,6 +72,8 @@ class price:
 	def checker(self, url):
 		response = requests.get(url)
 		return response.status_code
+
+
 
 
 
