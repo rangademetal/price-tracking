@@ -1,10 +1,11 @@
-import requests
 from bs4 import BeautifulSoup
-import smtplib
 from email.message import EmailMessage
 
+import smtplib
+import requests
 
-class price:
+
+class Price:
 	def __init__(self, header):
 		self.header = header
 
@@ -38,7 +39,7 @@ class price:
 			items = {'url': url, 'title': 'Title: '+title, 'price':'Price: '+price_final}
 		return items.values()
 	
-	def get_all_price(self, url):
+	def get_price(self, url):
 		page = requests.get(url, self.header)
 		soup = BeautifulSoup(page.content, 'html.parser')
 		if soup.find('div', {'class': 'apphub_AppName'}):
@@ -47,7 +48,6 @@ class price:
 			self.x = self.price_playstation(url)
 		return self.x
 		 
-
 	def message_email(self, array):
 		price = ''
 		for i in array:
@@ -59,6 +59,12 @@ class price:
 			array.append(i+'\n')
 		array.append('\n')
 
+	def convert_dict_to_string(self, dict_array):
+		s = ''
+		for i in dict_array:
+			s = str(i) + '\n'
+		return s
+
 	def send_mail(self, sender_email, receive_email, data, password):
 		msg = EmailMessage()
 		msg['Subject'] = 'Price tracker'
@@ -69,12 +75,6 @@ class price:
 			smtp.login(sender_email, password)
 			smtp.send_message(msg)
 	
-	def checker(self, url):
-		response = requests.get(url)
+	def get_status(self, url):
+		response = requests.get(url, self.header)
 		return response.status_code
-
-
-
-
-
-

@@ -12,3 +12,4 @@ class database:
 
 
 # SELECT tracking.URL FROM tracking LEFT JOIN platform ON tracking.id_platform = platform.id'
+# SELECT platfom.url_checker from platform
