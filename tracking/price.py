@@ -59,12 +59,6 @@ class Price:
 			array.append(i+'\n')
 		array.append('\n')
 
-	def convert_dict_to_string(self, dict_array):
-		s = ''
-		for i in dict_array:
-			s = str(i) + '\n'
-		return s
-
 	def send_mail(self, sender_email, receive_email, data, password):
 		msg = EmailMessage()
 		msg['Subject'] = 'Price tracker'

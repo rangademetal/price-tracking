@@ -136,13 +136,14 @@ class MainApp(gui.Ui_MainWindow, QMainWindow):
         con.close()
 
     def selected_prices(self):
+        tracker = []
         url = self.combo_product.currentText()
         print(url)
         x = self.tracking.get_price(str(url))
         self.tracking.convert_dict_to_arr(tracker, x)
         if(self.checkBox.isChecked()):
             self.tracking.send_mail(USERNAME_GMAIL, self.email, self.tracking.message_email(tracker), PASSWORD_GMAIL)
-        self.textEdit.append(self.tracking.convert_dict_to_string(x))
+        self.textEdit.append(self.tracking.message_email(tracker))
 
 if __name__ == '__main__':
     app = QApplication([])
