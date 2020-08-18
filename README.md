@@ -14,3 +14,5 @@ Price tracking and monitorization from different platforms
 ## Platform
 
 * Steam
+* PlayStation
+
